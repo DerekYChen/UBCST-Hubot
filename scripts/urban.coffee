@@ -30,7 +30,7 @@ module.exports = (robot) ->
         defnum = msg.match[1]-1
     urbanDict msg, msg.match[2], defnum, (found, entry) ->
       if !found
-        msg.send "\"#{msg.match[2]}\" not found"
+        msg.send "I don't know what \"#{msg.match[2]}\" is"
         return
       msg.send "#{entry.definition}"
 
@@ -40,7 +40,7 @@ module.exports = (robot) ->
         defnum = msg.match[1]-1
     urbanDict msg, msg.match[2], defnum, (found, entry) ->
       if !found
-        msg.send "\"#{msg.match[2]}\" not found"
+        msg.send "I don't know about an example of \"#{msg.match[2]}\""
         return
       msg.send "#{entry.example}"
 
@@ -48,7 +48,7 @@ urbanDict = (msg, query, defnum = 0, callback) ->
   msg.http("http://api.urbandictionary.com/v0/define?term=#{escape(query)}")
     .get() (err, res, body) ->
       result = JSON.parse(body)
-      if result.list.length >= defnum
+      if result.list.length-1 >= defnum
         callback(true, result.list[defnum])
       else
         callback(false)
